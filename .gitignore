@@ -1,0 +1,16 @@
+# Obsidian system files
+.obsidian/workspace
+.obsidian/graph.json
+.obsidian/plugins/**/data.json
+
+# Optional: plugin folders or cache
+.obsidian/plugins/
+.obsidian/themes/
+.obsidian/snippets/
+
+# OS/system files
+.DS_Store
+Thumbs.db
+
+# Optional: hidden vault backup folder
+.vault-backup/
