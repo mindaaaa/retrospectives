@@ -37,12 +37,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "무제.md",
+                "file": "templates/projects-template.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "무제"
+              "title": "projects-template"
             }
           }
         ],
@@ -119,7 +119,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "무제.md",
+                "file": "templates/projects-template.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -129,7 +129,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "무제 의 백링크"
+              "title": "projects-template 의 백링크"
             }
           },
           {
@@ -138,12 +138,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "무제.md",
+                "file": "templates/projects-template.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "무제 의 나가는 링크"
+              "title": "projects-template 의 나가는 링크"
             }
           },
           {
@@ -167,13 +167,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "무제.md",
+                "file": "templates/projects-template.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "무제 의 개요"
+              "title": "projects-template 의 개요"
             }
           }
         ]
@@ -196,8 +196,8 @@
   },
   "active": "818bb83b25fc6aba",
   "lastOpenFiles": [
-    "templates/projects-template.md",
     "templates/weekly-template.md",
+    "templates/projects-template.md",
     "무제.md",
     "templates",
     "무제.canvas",
