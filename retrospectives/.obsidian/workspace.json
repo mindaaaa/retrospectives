@@ -37,12 +37,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "weekly/2025-05-w2.md",
+                "file": "projects/hanzawa-kanji.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2025-05-w2"
+              "title": "hanzawa-kanji"
             }
           }
         ],
@@ -196,10 +196,10 @@
   },
   "active": "5f691b9679a88bf4",
   "lastOpenFiles": [
+    "weekly/2025-05-w2.md",
     "templates/projects-template.md",
     "projects/hanzawa-kanji.md",
     "templates/weekly-template.md",
-    "weekly/2025-05-w2.md",
     "templates",
     "무제.canvas",
     "환영합니다!.md",

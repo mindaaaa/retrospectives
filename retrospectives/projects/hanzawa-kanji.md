@@ -9,7 +9,7 @@
 - `개발 범위`
   - 한자 목록 스크롤 모드 구현
   - 문제 생성 및 보기 랜덤 출력 로직
-  - React 프론트 + Kotlin 백엔드 API 구현
+  - React 프론트 + Kotlin 백엔드 API 정합
 - `기술 스택`: React, CSS-module, Kotlin
   <br><br>
 
@@ -93,7 +93,7 @@ React 내부에서 **렌더링 최소화 조치를 적극적으로 적용**함�
 ### 구조
 
 이 프로젝트에서 처음으로 **백엔드 구조를 레이어드 아키텍처로 분리**해서 설계해봤다. <br><br>
-Controller, Service, Repository, DB 모델을 구분하고,  
+Controller, Service, Repository, DB 계층을 구분하고,  
 단순한 데이터 소스 기반이지만 구조적으로 확장 가능한 형태를 고민했다.
 
 - `Controller` 요청 수신
@@ -101,12 +101,13 @@ Controller, Service, Repository, DB 모델을 구분하고,
 - `Persistence` 한자 리스트 및 문제 조회
 - `DB` 데이터 저장소 및 도메인 모델
 
-| 항목              | 설명                                                                              |
-| ----------------- | --------------------------------------------------------------------------------- |
-| 레이어드 아키텍처 | Controller → Service → Repository → DataSource 구조                               |
-| DI(의존성 주입)   | `Configuration.kt`에서 `@Bean`으로 `KanjiRepositoryImpl` 주입                     |
-| 비즈니스 분리     | - `controller` 받고 넘기기<br>- `service` 로직 판단<br>- `repository` 데이터 가공 |
-| CORS 설정         | React 개발 서버와 분리되어도 API 요청 가능                                        |
+### 요약
+
+| 항목        | 설명                                                                  |
+| --------- | ------------------------------------------------------------------- |
+| 레이어드 아키텍처 | Controller → Service → Repository → DataSource 구조                   |
+| 비즈니스 분리   | - `controller` 받고 넘기기<br>- `service` 로직 판단<br>- `repository` 데이터 조회 |
+| CORS 설정   | React 애플리케이션과 서로 다른 `origin`에 위치하더라도 API 수신이 가능                     |
 
 ### API 예시
 
@@ -114,10 +115,12 @@ Controller, Service, Repository, DB 모델을 구분하고,
 GET /api/v1/hanzawa-kanji?quizId={id}&mode=RANDOM
 ```
 
+> Restfull한 API를 설계하기 위해서는 GET 메소드와 <br>Kanji 또는 hanza 등의 명시적인 리소스를 사용해야했지만 <br>애플리케이션의 이름에 맞추어 리소스는 hanzawa-kanji로 명명했다🔥🔥
+
+#### 쿼리 파라미터 설계
 - `quizId` 현재 퀴즈 ID
 - `mode` Random / Infinite 모드 분기
-
-> **cursor 기반 페이징 및 모드 기반 데이터 분기**
+- `cursor` cursor 기반 페이지네이션을 위한 인자
 
 ### 📁 디렉토리 구조
 
@@ -126,25 +129,25 @@ kotlin/com/mindaaaa/hanzawakanji/
 ├── db
 │   ├── model
 │   │   └── Kanji.kt              # 도메인 모델 정의
-│   └── KanjiDataSource.kt        # data.json 불러온 후 Kanji 리스트 반환
+│   └── KanjiDataSource.kt        # data.json 불러온 후 Kanji 리스트 변환
 
 ├── persistence
 │   ├── model
 │   │   └── Mode.kt
 │   ├── KanjiRepository.kt        # Repository 인터페이스 (데이터 조회)
-│   └── KanjiRepositoryImpl.kt    # 실제 데이터 필터링/셔플/슬라이싱 구현
+│   └── KanjiRepositoryImpl.kt    # Repository 인터페이스 구현체
 
 ├── presentation
-│   ├── KanjiController.kt        # GET /api/v1/hanzawa-kanji 처리
+│   ├── KanjiController.kt        # HTTP 요청 수신
 │   └── WebConfiguration.kt       # CORS 설정
 
 ├── service
 │   ├── 📁 dto
 │   │   ├── ListRequestDto.kt     # 요청 DTO
 │   │   └── ListResponseDto.kt    # 응답 DTO
-│   └── KanjiService.kt           # 핵심 로직 처리 → repository에 위임 후 결과 가공
+│   └── KanjiService.kt           # 애플리케이션 로직 처리 → repository로부터 조회 후 결과 가공
 ├── Application.kt
-└── Configuration.kt
+└── Configuration.kt              # 계층별 의존성 주입
 ```
 
 ### 아키텍처 설계 및 계층 구조
@@ -154,22 +157,13 @@ kotlin/com/mindaaaa/hanzawakanji/
 
 #### 계층별 역할
 
-| 레이어       | 폴더명          | 역할                               |
-| ------------ | --------------- | ---------------------------------- |
-| Presentation | `presentation/` | API 진입점 (Controller, Web 설정)  |
-| Service      | `service/`      | 비즈니스 로직 중심 계층            |
-| Persistence  | `persistence/`  | 데이터 접근 및 가공 (Repository)   |
-| Data         | `db/`           | JSON 데이터 로딩, 도메인 모델 정의 |
+| 레이어          | 폴더명             | 역할            |
+| ------------ | --------------- | ------------- |
+| Presentation | `presentation/` | API 진입점       |
+| Service      | `service/`      | 비즈니스 로직 중심 계층 |
+| Persistence  | `persistence/`  | 데이터 접근 계층     |
+| Data         | `db/`           | 한자 데이터 계층     |
 
-#### 구성 클래스
-
-- `KanjiController` API 엔드포인트 및 **요청 파라미터** 수신
-- `KanjiService` 요청 조합 및 응답 **DTO 가공**
-- `KanjiRepositoryImpl` 모드별 **셔플** 및 **커서 기반 페이징** 처리
-- `KanjiDataSource` JSON 파일로부터 데이터 불러오기
-- `Kanji` 한자 **도메인 모델** 정의
-
-> 기능을 책임 단위로 나누었고 변경에 강한 아키텍처 설계에 중점을 두었다.
 
 ### API 흐름
 
@@ -197,12 +191,9 @@ KanjiDataSource (JSON 데이터 로딩)
 
 ### 🌐 CORS 설정
 
-프론트엔드(React)와 백엔드를 각각 다른 `localhost`에서 개발하게 되면 브라우저의 **CORS** 정책에 따라 API 요청이 차단되는 경우가 발생할 수 있다.
+프론트엔드(React)와 백엔드를 각각 다른 `origin`에서 동작하게 되면 브라우저의 **CORS** 정책에 따라 API 요청이 차단되는 경우가 발생할 수 있다.
 
 이를 위해 Spring의 `WebMvcConfigurer`를 활용해 **CORS 설정**을 추가했다.
-
-- `KanjiController` 쿼리 파라미터를 받아 Service에 **요청 위임**
-- `WebConfiguration` **CORS 정책 설정**으로 React 개발 서버와의 통신 허용
 
 ```kotlin
 registry.addMapping("/**")
@@ -213,7 +204,7 @@ registry.addMapping("/**")
 
 #### 📌 고민 지점
 
-실제 배포시에는 기능을 확장하지 않은 상태에서도 도메인 제한이 필요할까?
+`addMapping`에 모든 `origin`을 허용하도록 했는데 실제 배포시에도 이런 설정이 적절할까?
 
 ### Service 계층의 이해
 
@@ -236,7 +227,7 @@ fun list(dto: ListRequestDto): ListResponseDto {
 
 #### 추상화
 
-`Repository`와 구현체를 나눈 이유는 **테스트나 확정을 고려한 구조적 유연성**을 위해서 인터페이스를 도입한 것이다.<br>
+`Repository`와 구현체를 나눈 이유는 **테스트나 확장을 고려한 구조적 유연성**을 위해서 인터페이스를 도입한 것이다.<br>
 Service 계층이 구현체와 결합하지 않도록 설계함으로써 `테스트 작성 / DI 적용 / 향후 교체`에 유리하도록 구성했다.
 
 #### 책임 분리
@@ -246,7 +237,7 @@ Service 계층이 구현체와 결합하지 않도록 설계함으로써 `테스
 이 클래스는 비즈니스 레이어에 **직접** 관여하지 않으며,<br>
 `KanjiRepository`를 통해서만 접근`필터링/페이징`하게 하여 계층 간의 책임을 분리할 수 있도록 설계했다.
 
-`Kanji` 클래스는 한자 정보를 표현하는 **정적 도메인 모델**로 전체 데이터 흐름의 **고정된 스펙**을 정의하는 데 사용되었다.
+`Kanji` 클래스는 한자 정보를 표현하는 **도메인 모델**을 정의하기 위해 사용되었다.
 
 ### 🔧 DTO를 통한 계층 간의 통신
 
@@ -255,10 +246,11 @@ Service 계층이 구현체와 결합하지 않도록 설계함으로써 `테스
 요청 / 응답에 필요한 정보를 명확히 전달하기 위해
 Controller ↔ Service 간에는 DTO를 사용해 의도를 분리했다.
 
-이 결과,<br> 도메인 모델과 API 포맷을 **독립적으로 유지**할 수 있었고<br>
+이 결과,<br>
+사용자의 요청과 서비스 인터페이스를 **독립적으로 유지**할 수 있었고<br>
 도메인 구조가 변경되더라도 **안정적으로 API 스펙이 유지**될 수 있는 효과를 기대할 수 있다.
 
-> `Kanji` → 전체 데이터 창고<br> > `RequestDto`→ 프론트에서 보낸 쇼핑 리스트<br> > `ResponseDto`→ 포장해서 출고되는 택배 상자
+> `Kanji` → 개별 데이터 <br> `RequestDto`→ 프론트에서 보낸 쇼핑 리스트<br> `ResponseDto`→ 포장해서 출고되는 택배 상자
 
 > 설계 의도를 분명히 표현했을 뿐만 아니라
 > API와 내부 도메인 로직을 안전하게 다룰 수 있게 됐다.
@@ -279,14 +271,10 @@ class Configuration(
 }
 ```
 
-이 구조는 **SOLID 원칙의 DIP(Dependency Inversion Principle)**를 적용한 형태로 <br>Service는 `KanjiRepositoryImpl`이 아닌 `KanjiRepository`라는 추상화에만 의존한다.
+이 구조는 **SOLID 원칙의 DIP(Dependency Inversion Principle)**를 적용한 형태로 <br>Service는 `KanjiRepositoryImpl`이 아닌 `KanjiRepository`라는 추상계층에만 의존한다.
 
 이를 통해 **구현체 교체, 테스트 주입, 유지 보수**에 유리한 구조를 만들 수 있었다.
 
-> 상위 모듈`Service`은 하위 구현체에 의존하지 않고,
-> **인터페이스를 통해 의존성을 역전**시킨다는
-> DIP의 개념을 처음으로 체화할 수 있던 경험이다.
-> <br><br>
 
 ## 🧘 배우고 느낀 것
 
