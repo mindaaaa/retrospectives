@@ -30,9 +30,23 @@
               "icon": "lucide-file",
               "title": "weekly-template"
             }
+          },
+          {
+            "id": "5f691b9679a88bf4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "weekly/무제.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "무제"
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -105,7 +119,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "templates/weekly-template.md",
+                "file": "weekly/무제.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +129,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "weekly-template 의 백링크"
+              "title": "무제 의 백링크"
             }
           },
           {
@@ -124,12 +138,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "templates/weekly-template.md",
+                "file": "weekly/무제.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "weekly-template 의 나가는 링크"
+              "title": "무제 의 나가는 링크"
             }
           },
           {
@@ -153,13 +167,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "templates/weekly-template.md",
+                "file": "weekly/무제.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "weekly-template 의 개요"
+              "title": "무제 의 개요"
             }
           }
         ]
@@ -180,11 +194,12 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "00b5797486dfc346",
+  "active": "1715c16b96cbedec",
   "lastOpenFiles": [
+    "templates/weekly-template.md",
+    "weekly/무제.md",
     "templates/projects-template.md",
     "projects/hanzawa-kanji.md",
-    "templates/weekly-template.md",
     "templates",
     "무제.canvas",
     "환영합니다!.md",
