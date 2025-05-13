@@ -271,8 +271,6 @@ class Configuration(
 }
 ```
 
-이 구조는 **SOLID 원칙의 DIP(Dependency Inversion Principle)**를 적용한 형태로 <br>Service는 `KanjiRepositoryImpl`이 아닌 `KanjiRepository`라는 추상계층에만 의존한다.
-
 이를 통해 **구현체 교체, 테스트 주입, 유지 보수**에 유리한 구조를 만들 수 있었다.
 
 
