@@ -35,7 +35,8 @@
               "title": "2025-05-w3"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -183,10 +184,10 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "93d8926975b9fda6",
+  "active": "04944034dd7c36c1",
   "lastOpenFiles": [
-    "weekly/2025-05-w3.md",
     "weekly/2025-05-w2.md",
+    "weekly/2025-05-w3.md",
     "projects/hanzawa-kanji.md",
     "templates/projects-template.md",
     "templates/weekly-template.md",
